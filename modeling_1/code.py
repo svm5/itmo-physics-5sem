@@ -12,7 +12,7 @@ def calculate_potential(pit_type="rectangular"):
         p = func(x)
     elif pit_type == "table":
         p = []
-        with open("data.txt", encoding="utf8") as f:
+        with open("data_steps.txt", encoding="utf8") as f:
             for line in f.readlines():
                 p.append(float(line))
         p = np.array(p, dtype=float)
@@ -48,12 +48,12 @@ n = 2000
 x = np.linspace(-1.5 * a, 1.5 * a, n)
 dx = x[1] - x[0]
 
-pit_type = "rectangular"
+pit_type = "table"
 p = calculate_potential(pit_type)
 H = hamiltonian()
 
 E_values, psi_values = solve_eq(H)
-mask = E_values< min(p[0], p[-1])
+mask = E_values < min(p[0], p[-1])
 E_values /= ev
 normed_psi_values = psi_norm(psi_values)
 # связанные состояния
@@ -62,7 +62,7 @@ psi_selected = normed_psi_values[:, mask]
 
 show_cnt = 7
 for i in range(min(show_cnt, len(E_selected))):
-    print( E_selected[i])
+    print(E_selected[i])
     plt.plot(x, psi_selected[:, i] + E_selected[i], label=f"E={round(E_selected[i], 2)} eV")
 plt.grid()
 plt.title("Собственные функции и собственные значения")
